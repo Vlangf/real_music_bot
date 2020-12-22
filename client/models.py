@@ -20,7 +20,7 @@ class WebhookInfo(BaseModel):
 
 class WebhookSetOrDelete(BaseModel):
     ok: bool
-    result: bool
+    result: bool = None
     error_code: int = None
     description: str
 
