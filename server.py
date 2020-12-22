@@ -2,6 +2,7 @@ from client import models
 from client.telega import TelegaBot
 from real_rock_parser import RealRockParser
 from fastapi import FastAPI, BackgroundTasks
+import uvicorn
 
 app = FastAPI()
 
@@ -19,3 +20,7 @@ def add_songs(item: models.UpdateResult, background_tasks: BackgroundTasks):
     if item.message.text.startswith('/add_songs'):
         genre = item.message.text.split(' ')[-1]
         background_tasks.add_task(add_songs_to_db_by_genre, genre, item.message.chat.id)
+
+
+if __name__ == "__main__":
+    uvicorn.run("server:app", host="0.0.0.0", port=8000)

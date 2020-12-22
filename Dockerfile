@@ -1,5 +1,5 @@
 FROM python:3.9-alpine
-RUN apk update && apk upgrade && apk add bash && apk add build-base
+RUN apk update && apk upgrade && apk add bash
 COPY . ./
 RUN pip install -r requirements.txt
-CMD ["uvicorn", "server:app", "--reload", "--host 0.0.0.0"]
+CMD ["python", "./server.py"]
