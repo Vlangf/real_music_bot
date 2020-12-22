@@ -1,6 +1,5 @@
-from pymongo import MongoClient
-from datetime import datetime
 import settings
+from pymongo import MongoClient
 
 
 class DB(object):
@@ -14,22 +13,9 @@ class DB(object):
                              password=settings.mongo_password)
         self.db = client.realMusic
 
-    # def get_habs(self) -> dict:
-    #     habs = {}
-    #     collection = self.db['habs']
-    #     cursor = collection.find()
-    #     # habs = map(lambda k, v: {k:v}, cursor)
-    #     for each in cursor:
-    #         habs[each['name']] = each['link']
-    #
-    #     return habs
-
-    def add_hab(self, song):
+    def add_song(self, song: dict):
         collection = self.db['songs']
         count = collection.find({'name': song['name']}).count()
         if count == 0:
-            collection.insert({'name': song['name'], 'band_name': song['band_name'], 'link': song['link'], 'like': 0})
-
-    # def del_hab(self, hab):
-    #     collection = self.db['habs']
-    #     collection.remove({"name": hab})
+            collection.insert({'name': song['name'], 'band_name': song['band_name'], 'link': song['link'], 'like': 0,
+                               'date_add_to_site': song['date'], 'genre': song['genre']})
