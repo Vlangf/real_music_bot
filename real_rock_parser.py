@@ -38,3 +38,5 @@ class RealRockParser():
                 DB().add_song(song)
 
             i += 1
+
+        return f'downloading songs from {genre} done'
