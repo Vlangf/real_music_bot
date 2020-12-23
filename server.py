@@ -12,7 +12,10 @@ bot.set_webhook()
 
 def add_songs_to_db_by_genre(genre: str, chat_id: int):
     done = RealRockParser().take_all_songs_from_current_genre(genre)
-    bot.send_message(message=done, chat_id=chat_id, parse_mode='html')
+    if done:
+        bot.send_message(message=done, chat_id=chat_id, parse_mode='html')
+    else:
+        bot.send_message(message='Net nichego', chat_id=chat_id, parse_mode='html')
 
 
 @app.post('/songs', status_code=200)
