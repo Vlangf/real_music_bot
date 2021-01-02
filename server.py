@@ -3,6 +3,7 @@ from client.telega import TelegaBot
 from real_rock_parser import RealRockParser
 from fastapi import FastAPI, BackgroundTasks
 from db.mongo import DB
+import time
 import uvicorn
 
 app = FastAPI()
@@ -12,6 +13,7 @@ bot.set_webhook()
 
 
 def add_songs_to_db_by_genre(genre: str, chat_id: int):
+    bot.send_message(message=f'start {time.ctime()}', chat_id=chat_id, parse_mode='html')
     done = RealRockParser().take_all_songs_from_current_genre(genre)
     if done:
         bot.send_message(message=done, chat_id=chat_id, parse_mode='html')
