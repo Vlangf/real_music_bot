@@ -27,7 +27,7 @@ class TelegaBot(object):
         return last_update_info.result[0].message.chat.id
 
     def send_message(self, message: str, chat_id, dis_preview: bool = True, parse_mode: str = None,
-                     dis_notification: bool = False) -> models.Message:
+                     dis_notification: bool = False, inline_keyboard=None, entities=None) -> models.Message:
         method: str = '/sendMessage'
 
         json = {
@@ -37,5 +37,40 @@ class TelegaBot(object):
             'parse_mode': parse_mode,
             'disable_notification': dis_notification
         }
+        if inline_keyboard:
+            json['reply_markup'] = {'inline_keyboard': inline_keyboard}
+        if entities:
+            json['entities'] = entities
 
-        return models.Message(**self.rest_client.post(method, json=json).json()['result'])
+        response = self.rest_client.post(method, json=json)
+        if response.ok:
+            return models.Message(**response.json()['result'])
+        else:
+            return models.Error(**response.json())
+
+    def send_audio(self, audio: str, caption: str, chat_id, inline_keyboard=None) -> models.Message:
+        method: str = '/sendAudio'
+
+        json = {
+            'chat_id': chat_id,
+            'audio': audio,
+            'caption': caption
+        }
+        if inline_keyboard:
+            json['reply_markup'] = {'inline_keyboard': inline_keyboard}
+
+        response = self.rest_client.post(method, json=json)
+        if response.ok:
+            return models.Message(**response.json()['result'])
+        else:
+            return models.Error(**response.json())
+
+    def answer_callback_query(self, callback_query_id: str, text: str):
+        method: str = '/answerCallbackQuery'
+
+        json = {
+            'callback_query_id': callback_query_id,
+            'text': text,
+        }
+
+        self.rest_client.post(method, json=json)
