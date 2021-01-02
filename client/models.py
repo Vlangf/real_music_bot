@@ -1,7 +1,5 @@
 from typing import List
 from pydantic import BaseModel
-from bson.objectid import ObjectId
-from datetime import datetime
 
 
 class WebhookInfoResult(BaseModel):
@@ -102,10 +100,13 @@ class Error(BaseModel):
 
 
 class Song(BaseModel):
-    _id: ObjectId
+    id_: int
     name: str
     band_name: str
     link: str
     like: int
-    date_add_to_site: datetime
+    date_add_to_site: str
     genre: str
+
+    class Config:
+        fields = {'id_': 'id'}
