@@ -1,6 +1,6 @@
+import time
 import requests
 from db.postgree import DB
-import time
 from bs4 import BeautifulSoup
 
 
