@@ -13,6 +13,9 @@ class RealRockParser():
 
         i = 1
         while True:
+            if i > 2500:
+                break
+
             page = requests.get(f'{genre_url}{i}')
             if 'Ничего не найдено.' in page.text:
                 break

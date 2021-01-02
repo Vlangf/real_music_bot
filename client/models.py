@@ -1,5 +1,7 @@
 from typing import List
 from pydantic import BaseModel
+from bson.objectid import ObjectId
+from datetime import datetime
 
 
 class WebhookInfoResult(BaseModel):
@@ -30,7 +32,7 @@ class From(BaseModel):
     is_bot: bool
     first_name: str
     username: str
-    language_code: str
+    language_code: str = None
 
 
 class Chat(BaseModel):
@@ -40,18 +42,70 @@ class Chat(BaseModel):
     type: str
 
 
+class InlineButton(BaseModel):
+    text: str
+    callback_data: str = None
+
+
+class ReplyMarkup(BaseModel):
+    inline_keyboard: List[List[InlineButton]]
+
+
+class Entities(BaseModel):
+    offset: int
+    length: int
+    type: str
+
+
 class Message(BaseModel):
     message_id: int
+    from_: From
     chat: Chat
     date: int
-    text: str
+    edit_date: int = None
+    text: str = None
+    caption: str = None
+    reply_markup: ReplyMarkup = None
+    entities: List[Entities] = None
+
+    class Config:
+        fields = {'from_': 'from'}
+
+
+class CallbackQuery(BaseModel):
+    id: str
+    from_: From
+    message: Message
+    chat_instance: str
+    data: str
+
+    class Config:
+        fields = {'from_': 'from'}
 
 
 class UpdateResult(BaseModel):
     update_id: int
-    message: Message
+    message: Message = None
+    edited_message: Message = None
+    callback_query: CallbackQuery = None
 
 
 class Update(BaseModel):
     ok: bool
     result: List[UpdateResult]
+
+
+class Error(BaseModel):
+    ok: bool
+    error_code: int
+    description: str
+
+
+class Song(BaseModel):
+    _id: ObjectId
+    name: str
+    band_name: str
+    link: str
+    like: int
+    date_add_to_site: datetime
+    genre: str
