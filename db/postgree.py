@@ -1,12 +1,13 @@
 import psycopg2
+import settings
 from psycopg2.extras import execute_values
 from client import models
 
 
 class DB(object):
     def __init__(self):
-        self.conn = psycopg2.connect(dbname='realmusic', host='localhost', port=5532, user='postgres',
-                                     password='mysecretpassword')
+        self.conn = psycopg2.connect(dbname='realmusic', host=settings.mongo_host, port=settings.mongo_port,
+                                     user='postgres', password='mysecretpassword')
         self.cur = self.conn.cursor()
 
     def add_songs(self, songs: list):
