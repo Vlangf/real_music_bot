@@ -7,7 +7,7 @@ from client import models
 class DB(object):
     def __init__(self):
         self.conn = psycopg2.connect(dbname='realmusic', host=settings.mongo_host, port=settings.mongo_port,
-                                     user='postgres', password='mysecretpassword')
+                                     user=settings.mongo_login, password=settings.mongo_password)
         self.cur = self.conn.cursor()
 
     def add_songs(self, songs: list):
